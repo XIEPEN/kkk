@@ -88,7 +88,7 @@ export default {
   .login-form {
     width: 500px;
     height: 350px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color:red(0.5);
     border-radius: 7px;
     padding-right: 34px;
     position: fixed;
