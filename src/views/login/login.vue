@@ -62,15 +62,15 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
 
-          alert("前端验证通过，可以发送给后端!");
+          alert("登录成功");
           let username = this.loginForm.username;
           let password = this.loginForm.password;
 
-          console.log(username, password);直接获取路由对象
+          console.log(username, password);
           this.$router.push('/');
           
         } else {
-          console.log("前端验证不通过, 不能发送");
+          console.log("登录失败");
           return false;
         }
       });
