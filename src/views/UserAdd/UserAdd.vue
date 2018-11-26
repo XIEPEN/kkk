@@ -8,7 +8,6 @@
                 <div slot="header" class="clearfix">
                     <span>添加账号</span>
                 </div>
-
                 <!-- 面板内容 -->
                 <div class="text item">
                     <!-- 添加账户表单 -->

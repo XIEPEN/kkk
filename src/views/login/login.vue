@@ -2,7 +2,6 @@
   <div class="login">
     <div class="login-form">
         <h1 class="title">
-            <i class="el-icon-setting"></i>
             超市系统登录
         </h1>
         <el-form :model="loginForm" status-icon :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm">
@@ -35,7 +34,6 @@ export default {
             callback()
         }
     }
-
     return {
       loginForm: {
         username: "",
@@ -61,16 +59,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-
-          alert("登录成功");
           let username = this.loginForm.username;
           let password = this.loginForm.password;
-
-          console.log(username, password);
           this.$router.push('/');
-          
         } else {
-          console.log("登录失败");
           return false;
         }
       });
@@ -85,12 +77,12 @@ export default {
 
 .login {
   height: 100%;
-  background-image:url(./image/lu.jpeg);
+  background-image:url(./image/cj3.jpg);
   height: 100%;
   .login-form {
     width: 500px;
     height: 350px;
-    background-color:rgba(0, 0, 0, 0.2);
+    background-color:rgba(0, 0, 0, 0.1);
     border-radius: 7px;
     padding-right: 34px;
     position: fixed;
@@ -101,14 +93,14 @@ export default {
     margin: auto;
     .title {
         text-align: center;
-        color: #ffffff;
+        color:#ff6600;
         font-size: 24px;
         margin-bottom: 30px;
     }
     .el-form {
        .el-form-item {
            .el-form-item__label {
-               color: #ffffff;
+               color:#ff6600;
            }
        }
     }
