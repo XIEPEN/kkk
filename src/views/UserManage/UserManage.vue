@@ -89,10 +89,14 @@ export default {
   },
   data() {
     return {
-      dialogFormVisible: false, 
-      tableData: [], 
-      editId: '', 
-      seletedUser: [],
+      totalCount: 11, // 数据总条数
+      currentPage: 1, // 当前页
+      pageSize: 3, // 默认每页显示3条
+      dialogFormVisible: false, // 控制修改模态框的显示和隐藏的变量
+      tableData: [], // 用户账号列表的数据
+      editId: '', // 保存要修改的数据的id
+      seletedUser: [], // 保存选中的用户数据
+      // 和修改表单双向绑定的数据
       editForm: { 
         username: "",
         password: "",
@@ -119,97 +123,167 @@ export default {
   },
  
   methods: {
+    // 当页面尺寸(每页显示多少条)改变 就触发这个函数 传入当前页面尺寸
+    handleSizeChange(val) {
+      // 重置pageSize 的值
+      this.pageSize = val;
+      // 调用获取数据的函数
+      this.getUserListByPage();
+    },
+    // 当页码改变 就会触发这个函数 传入当前页码
+    handleCurrentChange(val) {
+      // 重置当前页码 
+      this.currentPage = val;
+      // 调用获取数据的函数
+      this.getUserListByPage();
+    },
+    // 编辑(修改)触发函数
     handleEdit(id) {
+      // 把要修改的id 保存到一个变量里面
       this.editId = id;
 
+      // 发送一个ajax 把需要修改的数据的id发送给后端
       this.axios.get(`http://127.0.0.1:3000/users/edituser?id=${id}`)
         .then(response => {
+          // 一一对应 把数据回填到模态框里面
           this.editForm.username = response.data[0].username;
           this.editForm.password = response.data[0].password;
           this.editForm.usergroup = response.data[0].usergroup;
 
+          // 回填号数据以后 再弹出模态框
           this.dialogFormVisible = true;
         })
     },
+    // 删除触发的函数
     handleDelete(id) {
+      // 发送一个请求 把id发送给后端
       this.axios
-        .get(`http://192.168.20.1:3000/users/deluser?id=${id}`)
+        .get(`http://127.0.0.1:3000/users/deluser?id=${id}`)
         .then(response => {
+          // 根据后端响应的数据判断
           if (response.data.rstCode === 1) {
+            // 弹出删除成功的提示
             this.$message({
               type: "success",
               message: response.data.msg
             });
-            this.getUserList();
+
+            // 重新请求一下所有账号数据（刚才已经把数据删除了 所有再次请求就是只有删除后的数据）
+            this.getUserListByPage();
           } else {
             this.$message.error(response.data.msg);
           }
         });
     },
+    // 取消选择的函数
     toggleSelection() {
+       // 取消选择
         this.$refs.userlist.clearSelection();
     },
+    // 当选择状态改变 触发这个函数
     handleSelectionChange(val) {
- 
+      // 把选中的数据 保存到一个变量里面
       this.seletedUser = val;
     },
-    batchDel () { 
+    // 批量删除函数
+    batchDel () {
+      // 把需要批量删除的数据的id 取出来
       let idArr = this.seletedUser.map( v => v.id );
 
+      // 判断 如果没有选中任何数据 那么就弹出请选择以后再操作 直接返回
       if (!idArr.length) {
-        this.$message.error('请选择以后再操作! 你是不是傻！')
+        this.$message.error('当前没有选中')
         return
       }
+
+      // 收集参数
       let param = {
-        idArr: JSON.stringify(idArr)
+        idArr: JSON.stringify(idArr) // 把数组转为字符串
       }
 
+      // 发送一个ajax请求 把这个id数组（里面是需要批量删除的数据的id）发送给后端
       this.axios.post('http://127.0.0.1:3000/users/batchdel', 
-      qs.stringify(param), 
+      qs.stringify(param), // 处理参数
       { Header: { 'Content-Type': 'application/x-www-form-urlencoded' } } // 设置请求头
       ).then(response => {
+        // 接收后端响应的数据 根据结果判断
         if (response.data.rstCode === 1) {
+          // 成功 弹出批量删除成功的提示 
           this.$message({
             type: 'success',
             message: response.data.msg
           })
-          this.getUserList();
+         
+          // 刷新页面（重新获取一下最新数据）
+          this.getUserListByPage();
         } else {
+          // 失败 弹出错误信息
           this.$message.error(response.data.msg)
         }
       })
+
     },
-    getUserList() {
+    // 按照分页请求数据
+     getUserListByPage() {
+      // 获取当前页码
+      let currentPage = this.currentPage;
+      // 获取当前页面尺寸pageSize(每页显示多少条)
+      let pageSize = this.pageSize
+
+      // 发送ajax请求 按照分页请求数据
       this.axios
-        .get("http://192.168.20.1:3000/users/userlist")
-        .then(response => { 
-          this.tableData = response.data;
+        .get(`http://127.0.0.1:3000/users/userlistbypage?currentPage=${currentPage}&pageSize=${pageSize}`)
+        .then(response => {
+
+          // 把后端返回的对应页码的数据 赋值给 tableData
+          this.tableData = response.data.data;
+          // 把后端返回的数据总调数据 赋值 给 tatalCount
+          this.totalCount = response.data.totalCount;
+
+          // 如果当前页码 没有数据 且 不是第一页
+          if (!response.data.data.length && this.currentPage !== 1) {
+            // 当前页码减去 1 
+            this.currentPage -= 1;
+            // 再次调用自己
+            this.getUserListByPage();
+          }
         });
     },
+    // 修改表单提交函数
+    // 表单提交触发的函数
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          // 收集修改后的新数据 和 一个原来的id
           let params = {
             username: this.editForm.username,
             password: this.editForm.password,
             usergroup: this.editForm.usergroup,
             editId: this.editId
           }
+
+          // 发送ajax 把修改后的新数据 和 原来的id 一起发送给后端
           this.axios.post('http://127.0.0.1:3000/users/saveedit',
           qs.stringify(params),
           { Header: { 'Content-Type': 'application/x-www-form-urlencoded' } }
           ).then(response => {
+            // 根据后端响应的数据判断
             if (response.data.rstCode === 1) {
+              // 成功 弹出修改成功的提示
               this.$message({
                 type: 'success',
                 message: response.data.msg
               })
-              this.getUserList()
+              // 重新调用一下获取数据的方法（刷新一遍页面 获取最新数据）
+              this.getUserListByPage()
             } else {
               this.$message.error(response.data.msg);
             }
           })
+
+          // 关闭模态框
           this.dialogFormVisible = false;
+
         } else {
           console.log("前端验证不通过, 不能发送");
           return false;
@@ -217,13 +291,16 @@ export default {
       });
     }
   },
+  // 生命周期钩子函数(vue实例创建完成 但是还没有挂载dom 适合请求数据) 只要进入组件 组件就会经历这个周期 会自动触发这个函数
   created() {
-    this.getUserList();
+    // 页面加载 请求一次数据 按照分页请求数据
+    this.getUserListByPage();
   },
+  // 过滤器
   filters: {
- 
+    // 过滤器
     formatCdate(value) {
-      return moment(value).format("YYYY-MM-DD HH:mm:ss");
+      return moment(value).format("YYYY-MM-DD=HH:mm:ss");
     }
   }
 };
@@ -231,10 +308,11 @@ export default {
 <style lang="less">
 .user-manage {
   width: 100%;
-  display: flex; 
-  flex-direction: column; 
+  display: flex; // 让这个盒子 变为一个可以伸缩的盒子
+  flex-direction: column; // 方向是 纵向
+  // 主体
   .el-main {
-    flex: 1; 
+    flex: 1; // 自动增长 撑满
     .el-card {
       .el-card__header {
         font-weight: 700;

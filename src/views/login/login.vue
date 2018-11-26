@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import qs from "qs";
 export default {
   data() {
     const confirmPwd = (rule, value, callback) => {
@@ -58,10 +59,39 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-          let username = this.loginForm.username;
-          let password = this.loginForm.password;
-          this.$router.push('/');
+       if (valid) {
+          // 收集
+          let params = {
+            username: this.loginForm.username,
+            password: this.loginForm.password
+          }
+
+          // 允许携带cookie
+          this.axios.defaults.withCredentials=true;
+          
+          // 写ajax 把用户名和密码 一起发送给后端
+          this.axios.post('http://127.0.0.1:3000/users/checklogin',
+            qs.stringify(params),
+            { headers: {'Content-Type':'application/x-www-form-urlencoded'} }
+          )
+            .then(response => {
+              // 接收后端响应的数据 判断
+              if (response.data.rstCode === 1) {
+                // 成功 弹出登录成功的提示
+                this.$message({
+                  type: 'success',
+                  message: response.data.msg
+                });
+
+                // 跳转到首页
+                setTimeout(() => {
+                  this.$router.push("/");
+                }, 500)
+              } else {
+                // 失败 弹出失败的提示
+                this.$message.error(response.data.msg)
+              }
+            })
         } else {
           return false;
         }

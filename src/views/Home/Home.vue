@@ -1,89 +1,68 @@
 <template>
-    <div class="home">
-        <!-- 头部 -->
-        <Header></Header>
-        <!-- 主体 -->
-        <el-main>
-            <el-card class="box-card">
+  <div class="home">
+    <!-- 头部 -->
+    <Header></Header>
+    <!-- 主体 -->
+    <el-main>
+      <el-card class="box-card">
+        <!-- 面板标题 -->
+        <div slot="header" class="clearfix">
+          <span>系统信息</span>
+        </div>
+        <!-- 面板内容 -->
+        <div class="text item">
+          <el-alert title="消息提示的文案" type="info">
+          </el-alert>
+          <el-alert title="成功提示的文案" type="success">
+          </el-alert>
+          <!-- 表格 -->
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <!-- 左侧表格 -->
+              <el-card>
                 <!-- 面板标题 -->
                 <div slot="header" class="clearfix">
-                    <span>系统信息</span>
+                  <span>销售排行</span>
                 </div>
-                <!-- 面板内容 -->
                 <div class="text item">
-                    <el-alert
-                        title="消息提示的文案"
-                        type="info">
-                    </el-alert>
-                   <el-alert
-                        title="成功提示的文案"
-                        type="success">
-                    </el-alert>
-                    <!-- 表格 -->
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                           <!-- 左侧表格 -->
-                           <el-card>
-                                <!-- 面板标题 -->
-                                <div slot="header" class="clearfix">
-                                    <span>销售排行</span>
-                                </div>
-                                <div class="text item">
-                                    <!-- 表格 -->
-                                    <el-table
-                                        :data="tableDataLeft"
-                                        style="width: 100%">
-                                        <el-table-column
-                                            prop="goodsname"
-                                            label="商品名称"
-                                            >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="sales"
-                                            label="销量">
-                                        </el-table-column>
-                                    </el-table>
-                                </div>
-                           </el-card>
-                        </el-col>
-                        <el-col :span="12">
-                            <!-- 右侧表格 -->
-                           <el-card>
-                                <!-- 面板标题 -->
-                                <div slot="header" class="clearfix">
-                                    <span>缺货的商品</span>
-                                </div>
-                                <div class="text item">
-                                    <!-- 表格 -->
-                                    <el-table
-                                        :data="tableDataRight"
-                                        style="width: 100%">
-                                        <el-table-column
-                                            prop="goodsname"
-                                            label="商品名称"
-                                            >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="repertoryCount"
-                                            label="库存"
-                                            >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="option"
-                                            label="操作">
-                                        </el-table-column>
-                                           
-                                    </el-table>
-                                </div>
-                           </el-card>
-                        </el-col>
-                    </el-row>
+                  <!-- 表格 -->
+                  <el-table :data="tableDataLeft" style="width: 100%">
+                    <el-table-column prop="goodsname" label="商品名称">
+                    </el-table-column>
+                    <el-table-column prop="sales" label="销量">
+                    </el-table-column>
+                  </el-table>
                 </div>
-            </el-card>
-        </el-main>
-        <!-- 尾部 -->
-        <Footer></Footer>
-    </div>
+              </el-card>
+            </el-col>
+            <el-col :span="12">
+              <!-- 右侧表格 -->
+              <el-card>
+                <!-- 面板标题 -->
+                <div slot="header" class="clearfix">
+                  <span>缺货的商品</span>
+                </div>
+                <div class="text item">
+                  <!-- 表格 -->
+                  <el-table :data="tableDataRight" style="width: 100%">
+                    <el-table-column prop="goodsname" label="商品名称">
+                    </el-table-column>
+                    <el-table-column prop="repertoryCount" label="库存">
+                    </el-table-column>
+                    <el-table-column prop="option" label="操作">
+                    </el-table-column>
+
+                  </el-table>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+    </el-main>
+    <!-- 尾部 -->
+    <Footer></Footer>
+  </div>
 </template>
 <script>
 // 引入头部组件 和 尾部组件
@@ -100,42 +79,42 @@ export default {
       // 左侧表格数据
       tableDataLeft: [
         {
-          goodsname: "蒂花之秀",
-          sales: 100
+          goodsname: "李青",
+          sales: 4800
         },
         {
-          goodsname: "海飞丝",
-          sales: 105
+          goodsname: "李青",
+          sales: 4800
         },
         {
-          goodsname: "曼秀雷敦",
-          sales: 107
+          goodsname: "李青",
+          sales: 4800
         },
         {
-          goodsname: "辣条",
-          sales: 500
+          goodsname: "李青",
+          sales: 4800
         }
       ],
       tableDataRight: [
         {
-          goodsname: "海飞丝",
-          repertoryCount: 1000,
-          option: '入库'
+          goodsname: "李青",
+          repertoryCount: 4800,
+          option: "入库"
         },
         {
-          goodsname: "蒂花之秀",
-          repertoryCount: 5,
-          option: '入库'
+          goodsname: "李青",
+          repertoryCount: 4800,
+          option: "入库"
         },
         {
-          goodsname: "曼秀雷敦",
-          repertoryCount: 5,
-          option: '入库'
+          goodsname: "李青",
+          repertoryCount: 4800,
+          option: "入库"
         },
         {
-          goodsname: "辣条",
-          repertoryCount: 5,
-          option: '入库'
+          goodsname: "李青",
+          repertoryCount: 4800,
+          option: "入库"
         }
       ]
     };
