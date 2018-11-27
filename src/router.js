@@ -6,6 +6,8 @@ import Home from '@/views/Home/Home.vue'
 import UserAdd from '@/views/UserAdd/UserAdd.vue'
 import UserManage from '@/views/UserManage/UserManage.vue'
 import EditPassword from '@/views/EditPassword/EditPassword.vue'
+import GoodsManage from '@/views/GoodsManage/GoodsManage.vue'
+import GoodsAdd from '@/views/GoodsAdd/GoodsAdd.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -39,6 +41,16 @@ export default new Router({
           path: '/editpassword',
           component: EditPassword
         },
+        {
+          name: 'GoodsManage',
+          path: '/goodsmanage',
+          component: GoodsManage
+        },
+        {
+          name: 'GoodsAdd',
+          path: '/goodsadd',
+          component: GoodsAdd
+        }
       ]
     }
   ],
