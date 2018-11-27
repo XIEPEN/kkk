@@ -62,6 +62,17 @@
               <el-button type="primary" @click="submitForm('editForm')">确 定</el-button>
             </div>
           </el-dialog>
+          <div style="margin-top: 20px">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[1, 3, 5, 10, 20, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+            </el-pagination>
+          </div>
 
           <!-- 选择按钮 -->
           <div style="margin-top: 20px">
@@ -107,7 +118,7 @@ export default {
         // 验证用户名
         username: [
           { required: true, message: "账号不能为空", trigger: "blur" }, // 非空验证
-          { min: 3, max: 6, message: "长度必须 3 到 6 个字符", trigger: "blur" } // 长度验证
+          { min: 2, max: 6, message: "长度必须 2 到 6 个字符", trigger: "blur" } // 长度验证
         ],
         // 验证密码
         password: [

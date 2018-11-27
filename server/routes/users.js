@@ -167,10 +167,10 @@ router.get('/deluser', (req, res) => {
       // 根据结果判断 如果受影响行数 > 0 就是删除成功
       if (data.affectedRows > 0) {
         // 返回删除成功的信息给前端
-        res.send({"rstCode": 1, "msg":"删除成功,哈哈！"})
+        res.send({"rstCode": 1, "msg":"删除成功"})
       } else {
         // 否则就是删除失败 返回删除失败的信息给前端
-        res.send({"rstCode": 0, "msg":"删除失败,呵呵!"})
+        res.send({"rstCode": 0, "msg":"删除失败"})
       }
     }
   })
